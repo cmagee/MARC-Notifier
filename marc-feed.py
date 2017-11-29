@@ -84,6 +84,7 @@ def main():
 
     t_match = re.search(r'arn:aws:sns:\w*-\w*-\d:\d\d\d\d\d\d\d\d\d\d\d\d:\w*',
                         topic)
+
     if t_match:
         topic = t_match.group()
         if args.dry_run:
@@ -92,12 +93,6 @@ def main():
             print rss_parser(url, topic)
     else:
         sys.exit("Please input valid SNS Topic ARN...")
-
-
-    if args.dry_run:
-        print dry_run(url)
-    else:
-        rss_parser(url, topic)
 
 
 if __name__ == '__main__':
