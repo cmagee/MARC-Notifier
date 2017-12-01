@@ -57,21 +57,21 @@ def rss_parser(url, topic):
     """
     Main RSS feed parser function
     """
-    summary = ""
     rss_data = feedparser.parse(url)
     for entry in rss_data['entries']:
         pub_date = entry['published']
         to_est = datetime.strptime(pub_date, '%a, %d %b %Y %H:%M:%S GMT')
         to_est += - timedelta(hours=5)
-        summary += ("Published @ %s EST %s\n\n" % (to_est,
+        summary = ("Published @ %s EST %s\n\n" % (to_est,
                     entry['summary_detail']['value']))
         check_cache = redis_helper(summary, "get")
         if check_cache is True:
             pass
         else:
-            redis_helper(summary, "set")
             publish_notification(summary, topic)
+            redis_helper(summary, "set")
             print "Posted latest notifications to SNS topic!"
+        summary = ""
 
 
 def main():
